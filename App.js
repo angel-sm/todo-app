@@ -10,104 +10,74 @@ import React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
-  StatusBar,
+  Button,
+  TextInput,
+  ScrollView,
 } from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
 const App: () => React$Node = () => {
+  const [task, setTask] = React.useState('');
+  const [tasks, setTasks] = React.useState([]);
+
+  const handleAddTask = () => {
+    setTasks((currentTask) => [...currentTask, task]);
+    console.log(tasks);
+  };
+
   return (
-    <>
-      <StatusBar barStyle="dark-content" />
+    <View style={styles.mainView}>
+      <View>
+        <TextInput
+          placeholder="Add some tasks..."
+          style={styles.inputTask}
+          onChangeText={(text) => {
+            setTask(text);
+          }}
+          value={task}
+        />
+        <Button
+          title="Add"
+          style={styles.addTaskButton}
+          onPress={handleAddTask}
+        />
+      </View>
       <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
+        <ScrollView>
+          {tasks.map((_task, index) => (
+            <View style={styles.taskContainer} key={index}>
+              <Text>{`${index + 1} - ${_task} `}</Text>
+              <Button title="X" />
             </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
+          ))}
         </ScrollView>
       </SafeAreaView>
-    </>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+  mainView: {
+    padding: 30,
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
+  inputTask: {
+    backgroundColor: 'rgba(0,0,0,.1)',
+    marginBottom: 10,
   },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
+  addTaskButton: {},
+  taskContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 10,
+    marginTop: 10,
+    marginBottom: 10,
+    fontSize: 19,
+    fontWeight: 'bold',
+    borderBottomColor: 'rgba(0,0,0,.1)',
+    borderBottomWidth: 1,
   },
 });
 
